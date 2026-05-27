@@ -18,6 +18,8 @@ Cada servidor ejecuta los siguientes componentes:
 
 Todos los servicios se despliegan en contenedores utilizando **Podman**.
 
+![Arquitectura](images/arquitectura.png)
+
 ---
 
 # Componentes de la Arquitectura
