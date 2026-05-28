@@ -227,6 +227,155 @@ frontend (active)
   rich rules: 
 ```
 
+### Creacion de usuario keycloak en los servidores
+
+
+```text
+$ ansible-playbook playbooks/11-user-config.yml 
+[WARNING]: Collection ansible.posix does not support Ansible version 2.14.18
+
+PLAY [Crear usuario para aplicaciones rootless] ***************************************************************************************************************************
+
+TASK [Gathering Facts] ****************************************************************************************************************************************************
+ok: [server2]
+ok: [server1]
+ok: [server3]
+
+TASK [Crear grupo] ********************************************************************************************************************************************************
+changed: [server2]
+changed: [server1]
+changed: [server3]
+
+TASK [Crear usuario] ******************************************************************************************************************************************************
+changed: [server3]
+changed: [server1]
+changed: [server2]
+
+TASK [Crear directorio extra] *********************************************************************************************************************************************
+changed: [server2]
+changed: [server1]
+changed: [server3]
+
+TASK [Crear directorio .ssh] **********************************************************************************************************************************************
+changed: [server3]
+changed: [server2]
+changed: [server1]
+
+TASK [Instalar llave publica ssh] *****************************************************************************************************************************************
+changed: [server3]
+changed: [server2]
+changed: [server1]
+
+TASK [Crear directorio containers config] *********************************************************************************************************************************
+changed: [server1]
+changed: [server3]
+changed: [server2]
+
+TASK [Configurar storage.conf para podman rootless] ***********************************************************************************************************************
+changed: [server1]
+changed: [server2]
+changed: [server3]
+
+TASK [Crear directorio podman-storage] ************************************************************************************************************************************
+changed: [server2]
+changed: [server1]
+changed: [server3]
+
+TASK [Habilitar linger para systemd --user] *******************************************************************************************************************************
+ok: [server2]
+ok: [server1]
+ok: [server3]
+
+PLAY RECAP ****************************************************************************************************************************************************************
+server1                    : ok=10   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+server2                    : ok=10   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+server3                    : ok=10   changed=8    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
 
 
 
+
+### Instalacion de etcd
+
+
+```text
+$ ansible-playbook playbooks/20-etcd.yml 
+[WARNING]: Collection ansible.posix does not support Ansible version 2.14.18
+
+PLAY [Instalar ETCD rootless con systemd] *********************************************************************************************************************************
+
+TASK [Gathering Facts] ****************************************************************************************************************************************************
+ok: [server3]
+ok: [server2]
+ok: [server1]
+
+TASK [Abrir puerto 2379/tcp en backend] ***********************************************************************************************************************************
+changed: [server3]
+changed: [server2]
+changed: [server1]
+
+TASK [Abrir puerto 2380/tcp en backend] ***********************************************************************************************************************************
+changed: [server1]
+changed: [server3]
+changed: [server2]
+
+TASK [Recargar firewalld] *************************************************************************************************************************************************
+changed: [server3]
+changed: [server1]
+changed: [server2]
+
+TASK [Crear directorio ETCD] **********************************************************************************************************************************************
+changed: [server2]
+changed: [server3]
+changed: [server1]
+
+TASK [Construir initial cluster string] ***********************************************************************************************************************************
+changed: [server1]
+changed: [server2]
+changed: [server3]
+
+TASK [Obtener IP del nodo actual] *****************************************************************************************************************************************
+changed: [server1]
+changed: [server2]
+changed: [server3]
+
+TASK [Crear contenedor ETCD] **********************************************************************************************************************************************
+changed: [server3]
+changed: [server1]
+changed: [server2]
+
+TASK [Crear directorio systemd user] **************************************************************************************************************************************
+changed: [server1]
+changed: [server3]
+changed: [server2]
+
+TASK [Generar servicio systemd para ETCD] *********************************************************************************************************************************
+changed: [server1]
+changed: [server3]
+changed: [server2]
+
+TASK [Habilitar linger para keycloak] *************************************************************************************************************************************
+changed: [server1]
+changed: [server2]
+changed: [server3]
+
+TASK [Obtener UID de keycloak] ********************************************************************************************************************************************
+changed: [server3]
+changed: [server1]
+changed: [server2]
+
+TASK [Reload systemd user daemon] *****************************************************************************************************************************************
+changed: [server2]
+changed: [server1]
+changed: [server3]
+
+TASK [Enable etcd user service] *******************************************************************************************************************************************
+changed: [server3]
+changed: [server1]
+changed: [server2]
+
+PLAY RECAP ****************************************************************************************************************************************************************
+server1                    : ok=14   changed=11    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+server2                    : ok=14   changed=11    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+server3                    : ok=14   changed=11    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
+```
